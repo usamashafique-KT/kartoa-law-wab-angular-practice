@@ -1,0 +1,87 @@
+<div class="container d-flex align-items-center min-vh-100">
+    <div class="w-100">
+        <h2 class="text-center mb-1">Sign In</h2>
+        <div class="row justify-content-center align-items-center">
+            <div class="col-md-8 col-lg-6 col-xl-5">
+                <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                    <div class="card-body p-5 pb-4">
+                        <div *ngIf="step==1">
+                            <form [formGroup]="signUpStepOne" autocomplete="off" (ngSubmit)="onSubmitStepOne()">
+
+                                <!-- <div>
+                                    <label for="firstName" class="form-label">Enter firstName</label>
+                                    <div class="form-group mb-2">
+                                        <input type="text" class="form-control " formControlName="firstName"
+                                            placeholder="firstName" id="firstName"
+                                            [ngClass]="{ 'is-invalid': submitted && one.firstName.errors }">
+                                        <div *ngIf="submitted && one.firstName.errors" class="invalid-feedback d-block">
+                                            <div *ngIf="one.firstName.errors.required">firstName required</div>
+                                        </div>
+                                    </div>
+                                </div> -->
+                                <!-- <div>
+                                    <label for="lastName" class="form-label">Enter lastName</label>
+                                    <div class="form-group mb-2">
+                                        <input type="text" class="form-control " formControlName="lastName"
+                                            placeholder="lastName" id="lastName"
+                                            [ngClass]="{ 'is-invalid': submitted && one.lastName.errors }">
+                                        <div *ngIf="submitted && one.lastName.errors" class="invalid-feedback d-block">
+                                            <div *ngIf="one.lastName.errors.required">lastName required</div>
+                                        </div>
+                                    </div>
+                                </div> -->
+                                <div>
+                                    <label for="phoneNo" class="form-label">Enter phoneNo</label>
+                                    <div class="form-group mb-2">
+                                        <input type="text" class="form-control " formControlName="phoneNo"
+                                            placeholder="phoneNo Address" id="phoneNo"
+                                            [ngClass]="{ 'is-invalid': submitted && one.phoneNo.errors }">
+                                        <div *ngIf="submitted && one.phoneNo.errors" class="invalid-feedback d-block">
+                                            <div *ngIf="one.phoneNo.errors.required">phoneNo required</div>
+                                        </div>
+                                        <div class="invalid-feedback d-block">
+                                            <div>{{errormessage}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="d-grid gap-2">
+                                    <button [disabled]="isFormSubmitted" class="btn btn-success px-3 py-2 flex-fill"
+                                        type="submit">
+                                        Next
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div *ngIf="step==2">
+
+                            <div class="mb-3">
+                                <code-input [isCodeHidden]="true" [codeLength]="6" (codeChanged)="onCodeChanged($event)"
+                                    (codeCompleted)="onCodeCompleted($event)">
+                                </code-input>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <!-- <button (click)="onSubmitStepFour()" [disabled]="isFormSubmitted"
+                                    class="btn btn-success px-3 py-2 flex-fill" type="button">
+                                    Verify
+                                </button> -->
+                                <button (click)="resendMobileVerificationCode()"
+                                    [disabled]="isFormSubmitted || isResendActive" type="button" class="btn btn-link">
+                                    <span *ngIf="resendLeftTime>0">
+                                        Resend OTP in {{resendLeftTime }} Seconds
+                                    </span>
+                                    <span *ngIf="resendLeftTime==0">
+                                        Resend
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <app-toast *ngIf="isToastVisible" [message]="message" [isVisible]="isVisible" [success]="success"></app-toast> -->

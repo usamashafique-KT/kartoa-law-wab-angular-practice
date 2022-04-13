@@ -1,0 +1,21 @@
+.resource-wrapper {     
+    padding: 1rem 2rem 1rem 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+    &:hover {
+        background: #dee2e6;
+        cursor: pointer;
+    }
+    .p-button-rounded.p-button-text{
+        position: absolute;
+        right: 14px;
+        height: auto;
+        width: auto;
+        top: 2px;
+    }
+
+}

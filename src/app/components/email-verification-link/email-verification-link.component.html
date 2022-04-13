@@ -1,0 +1,12 @@
+<div *ngIf="isRequesting">
+    <div class="text-center">
+        <div class="spinner-border text-info" role="status" style="width: 5rem; height: 5rem;">
+
+        </div>
+    </div>
+</div>
+<div class="text-center" *ngIf="!isRequesting">
+    {{message}}
+</div>
+
+<!-- <app-toast *ngIf="isToastVisible" [message]="message" [isVisible]="isVisible" [success]="success"></app-toast> -->

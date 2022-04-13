@@ -1,1 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
+.p-dropdown, .p-chips-multiple-container, .p-chips {
+    width: 100%;
+}
+
+.p-card {
+    box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%), 0 0 12px 1px rgb(0 0 0 / 12%) !important;
+}

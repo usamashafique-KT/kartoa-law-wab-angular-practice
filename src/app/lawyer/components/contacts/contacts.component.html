@@ -1,0 +1,52 @@
+<div class="container">
+    <div>
+        <a [routerLink]="['../home']">Go To Home</a><br>
+        <a [routerLink]="['../add-contact']">Add New Contact</a><br>
+    </div>
+    <h4>Contacts</h4>
+
+    <div>
+        <p-table *ngIf="!isLoadingData" [value]="trashedResources" responsiveLayout="scroll">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Name</th>
+                    <th>Company</th>
+                    <th>Contact No</th>
+                    <th>Email</th>
+                    <th>Job Title</th>
+                    <th>Tag</th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-contact let-index="rowIndex">
+                <tr>
+                    <td>{{contact.FirstName +' '+ contact.LastName}}</td>
+                    <td>{{contact.Works[0].CompnayName}}</td>
+                    <td>{{contact.Phones[0].Value}}</td>
+                    <td>{{contact.Emails[0].Email}}</td>
+                    <td>{{contact.Works[0].JobTitle}}</td>
+                    <td>
+                        <p-chip *ngFor="let Tag of contact.Tags" [label]="Tag" styleClass="me-2"></p-chip>
+                    </td>
+                    <td>
+                        <button pButton class="p-button-rounded p-button-outlined" (click)="showEditForm(contact)"
+                            icon="pi pi-pencil" label="" iconPos="right">
+                        </button>
+                    </td>
+
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="7">No Resourse Found.</td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+        <div *ngIf="isLoadingData" class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+</div>

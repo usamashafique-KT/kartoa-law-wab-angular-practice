@@ -1,0 +1,273 @@
+<div class="container">
+    <div>
+        <a [routerLink]="['../home']">Go To Home</a><br>
+        <a [routerLink]="['../contacts']">View All Contacts</a><br>
+    </div>
+    <h4>
+        {{isEditContactInfo ? "Edit Contact" : "Add Contact"}}
+    </h4>
+
+    <div>
+        <form [formGroup]="contactSection" autocomplete="off" (ngSubmit)="onSubmitSaveContact()">
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <input placeholder="Title" type="text" formControlName="title" pInputText class="w-100" />
+                    <div *ngIf="submitted && one.title.errors" class="mt-1 invalid-feedback d-block">
+                        <div *ngIf="one.title.errors.required">title is required</div>
+                    </div>
+                </div>
+
+                <div class="col-6 mb-3">
+                    <input placeholder="First Name" type="text" formControlName="firstName" pInputText class="w-100" />
+                    <div *ngIf="submitted && one.firstName.errors" class="mt-1 invalid-feedback d-block">
+                        <div *ngIf="one.firstName.errors.required">firstName is required</div>
+                    </div>
+                </div>
+
+                <div class="col-6 mb-3">
+                    <input placeholder="Last Name" type="text" formControlName="lastName" pInputText class="w-100" />
+                    <div *ngIf="submitted && one.lastName.errors" class="mt-1 invalid-feedback d-block">
+                        <div *ngIf="one.lastName.errors.required">lastName is required</div>
+                    </div>
+                </div>
+
+                <div formArrayName="phones">
+                    <h6 class="d-flex align-items-center">
+                        Phone
+                        <button *ngIf="phones().length<3" pButton pRipple type="button" icon="pi pi-plus-circle"
+                            class="p-button-rounded p-button-secondary p-button-text" (click)="addPhone()">
+                        </button>
+                    </h6>
+
+                    <div *ngFor="let phone of phones().controls; let empIndex=index">
+                        <div class="row" [formGroupName]="empIndex">
+                            <div class="col-3 mb-3">
+                                <!-- <input placeholder="Number type" type="text" formControlName="type" pInputText
+                                    class="w-100" /> -->
+
+                                <p-dropdown appendTo="body" [options]="addressTypeCopy" formControlName="type"
+                                    placeholder="Select Phone Type" optionLabel="label" optionValue="value">
+                                </p-dropdown>
+
+                                <div *ngIf="submitted && one['phones']['controls'][empIndex].controls.type.errors"
+                                    class="mt-1 invalid-feedback d-block">
+                                    <div *ngIf="one['phones']['controls'][empIndex].controls.type.errors.required">
+                                        Type is required
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <input placeholder="Number" type="text" formControlName="value" pInputText
+                                    class="w-100" />
+
+                                <div *ngIf="submitted && one['phones']['controls'][empIndex].controls.value.errors"
+                                    class="mt-1 invalid-feedback d-block">
+                                    <div *ngIf="one['phones']['controls'][empIndex].controls.value.errors.required">
+                                        Type is
+                                        required</div>
+                                </div>
+                            </div>
+                            <div class="col-3 mb-3" *ngIf="phones().length>1">
+                                <button pButton pRipple type="button" icon="pi pi-minus-circle"
+                                    class="p-button-rounded p-button-secondary p-button-text"
+                                    (click)="removePhone(empIndex)">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div formArrayName="emails">
+                    <h6 class="d-flex align-items-center">
+                        Email
+                        <button *ngIf="emails().length<2" pButton pRipple type="button" icon="pi pi-plus-circle"
+                            class="p-button-rounded p-button-secondary p-button-text" (click)="addNewEmail()">
+                        </button>
+                    </h6>
+
+                    <div *ngFor="let email of emails().controls; let empIndex=index">
+                        <div class="row" [formGroupName]="empIndex">
+                            <div class="col-3 mb-3">
+                                <!-- <div class="field-radiobutton">-->
+                                <p-radioButton name="isPrimary" [value]="empIndex" formControlName="isPrimary"
+                                    (onClick)="onRadioChange(empIndex)">
+                                </p-radioButton>
+                                <!-- <input [value]="empIndex" type="radio" name="isPrimary" formControlName="isPrimary"
+                                    (change)="onRadioChange(empIndex)"> -->
+                                <label class="ms-2">Is Primary</label>
+
+                                <!-- </div> -->
+                            </div>
+                            <div class="col-3 mb-3">
+                                <input placeholder="email" type="text" formControlName="email" pInputText
+                                    class="w-100" />
+
+                                <div *ngIf="submitted && one['emails']['controls'][empIndex].controls.email.errors"
+                                    class="mt-1 invalid-feedback d-block">
+                                    <div *ngIf="one['emails']['controls'][empIndex].controls.email.errors.required">
+                                        Type is required
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3 mb-3" *ngIf="emails().length>1">
+                                <button pButton pRipple type="button" icon="pi pi-minus-circle"
+                                    class="p-button-rounded p-button-secondary p-button-text"
+                                    (click)="removeEmail(empIndex)">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div formArrayName="works">
+                    <h6 class="d-flex align-items-center">
+                        Work
+                        <button pButton pRipple type="button" icon="pi pi-plus-circle"
+                            class="p-button-rounded p-button-secondary p-button-text" (click)="addNewWork()">
+                        </button>
+                    </h6>
+
+                    <div *ngFor="let phone of works().controls; let empIndex=index">
+                        <div class="row" [formGroupName]="empIndex">
+                            <div class="col-3 mb-3">
+                                <input placeholder="compnayName" type="text" formControlName="compnayName" pInputText
+                                    class="w-100" />
+                                <div *ngIf="submitted && one['works']['controls'][empIndex].controls.compnayName.errors"
+                                    class="mt-1 invalid-feedback d-block">
+                                    <div
+                                        *ngIf="one['works']['controls'][empIndex].controls.compnayName.errors.required">
+                                        Type is required
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <input placeholder="jobTitle" type="text" formControlName="jobTitle" pInputText
+                                    class="w-100" />
+                                <div *ngIf="submitted && one['works']['controls'][empIndex].controls.jobTitle.errors"
+                                    class="mt-1 invalid-feedback d-block">
+                                    <div *ngIf="one['works']['controls'][empIndex].controls.jobTitle.errors.required">
+                                        Type is required
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3 mb-3" *ngIf="works().length>1">
+                                <button pButton pRipple type="button" icon="pi pi-minus-circle"
+                                    class="p-button-rounded p-button-secondary p-button-text"
+                                    (click)="removeWork(empIndex)">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div formArrayName="addresses">
+                    <h6 class="d-flex align-items-center">
+                        Addresses
+                        <button *ngIf="addresses().length<3" pButton pRipple type="button" icon="pi pi-plus-circle"
+                            class="p-button-rounded p-button-secondary p-button-text" (click)="addNewAddress()">
+                        </button>
+                    </h6>
+
+                    <div *ngFor="let phone of addresses().controls; let empIndex=index">
+                        <div class="row" [formGroupName]="empIndex">
+                            <div class="col-3 mb-3">
+
+                                <!-- <input placeholder="Type" type="text" formControlName="Type" pInputText class="w-100" /> -->
+
+                                <p-dropdown appendTo="body" [options]="addressTypeCopy" formControlName="Type"
+                                    placeholder="Select Address Type" optionLabel="label" optionValue="value">
+                                </p-dropdown>
+
+                                <div *ngIf="submitted && one['addresses']['controls'][empIndex].controls.Type.errors"
+                                    class="mt-1 invalid-feedback d-block">
+                                    <div *ngIf="one['addresses']['controls'][empIndex].controls.Type.errors.required">
+                                        Type is
+                                        required</div>
+                                </div>
+                                <div *ngIf="alreadyEnteredType" class="invalid-feedback d-block">
+                                    This Address type is already entered
+                                </div>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <input placeholder="Street" type="text" formControlName="Street" pInputText
+                                    class="w-100" />
+
+                                <div *ngIf="submitted && one['addresses']['controls'][empIndex].controls.Street.errors"
+                                    class="mt-1 invalid-feedback d-block">
+                                    <div *ngIf="one['addresses']['controls'][empIndex].controls.Street.errors.required">
+                                        Street is required</div>
+                                </div>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <input placeholder="City" type="text" formControlName="City" pInputText class="w-100" />
+
+                                <div *ngIf="submitted && one['addresses']['controls'][empIndex].controls.City.errors"
+                                    class="mt-1 invalid-feedback d-block">
+                                    <div *ngIf="one['addresses']['controls'][empIndex].controls.City.errors.required">
+                                        City is required</div>
+                                </div>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <input placeholder="State" type="text" formControlName="State" pInputText
+                                    class="w-100" />
+
+                                <div *ngIf="submitted && one['addresses']['controls'][empIndex].controls.State.errors"
+                                    class="mt-1 invalid-feedback d-block">
+                                    <div *ngIf="one['addresses']['controls'][empIndex].controls.State.errors.required">
+                                        State is required</div>
+                                </div>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <input placeholder="Country" type="text" formControlName="Country" pInputText
+                                    class="w-100" />
+
+                                <div *ngIf="submitted && one['addresses']['controls'][empIndex].controls.Country.errors"
+                                    class="mt-1 invalid-feedback d-block">
+                                    <div
+                                        *ngIf="one['addresses']['controls'][empIndex].controls.Country.errors.required">
+                                        Country is required</div>
+                                </div>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <input placeholder="PostalCode" type="text" formControlName="PostalCode" pInputText
+                                    class="w-100" />
+
+                                <div *ngIf="submitted && one['addresses']['controls'][empIndex].controls.PostalCode.errors"
+                                    class="mt-1 invalid-feedback d-block">
+                                    <div
+                                        *ngIf="one['addresses']['controls'][empIndex].controls.PostalCode.errors.required">
+                                        PostalCode is required</div>
+                                </div>
+                            </div>
+                            <div class="col-3 mb-3">
+                                <p-dropdown appendTo="body" [options]="privacies" formControlName="Privacy"
+                                    placeholder="Select Privacy" optionLabel="label" optionValue="value"></p-dropdown>
+                            </div>
+                            <div class="col-3 mb-3" *ngIf="addresses().length>1">
+                                <button pButton pRipple type="button" icon="pi pi-minus-circle"
+                                    class="p-button-rounded p-button-secondary p-button-text"
+                                    (click)="removeAddress(empIndex)">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-6 mb-3">
+                    <p-chips placeholder="Enter Tags" formControlName="Tags" separator=","></p-chips>
+                    <div *ngIf="submitted && one.Tags.errors" class="invalid-feedback d-block">
+                        <div *ngIf="one.Tags.errors.required">Enter Tags</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="mb-2 col-12">
+                    <button [disabled]="isFormSubmitted" class="btn btn-success p-3 w-100" type="submit">
+                        {{isEditContactInfo ? "Update Contact" : "Save Contact"}}
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

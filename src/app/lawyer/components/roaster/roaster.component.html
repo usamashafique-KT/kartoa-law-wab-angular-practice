@@ -1,0 +1,508 @@
+<div class="container">
+    <div class="m-2">
+        <a [routerLink]="['../home']">Go To Home</a><br>
+    </div>
+    <p-button (click)="onSubmitForm()" label="Save Roster" icon="pi pi-plus"></p-button>
+    <form [formGroup]="roasterFormGroup" autocomplete="off">
+        <table>
+            <tr>
+                <th>Days</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Area of Law</th>
+                <th>Services</th>
+                <th>Type</th>
+                <th>Location</th>
+                <th>Actions</th>
+            </tr>
+            <tr>
+                <td colspan="8">
+                    <p-divider></p-divider>
+                </td>
+            </tr>
+            <tr formGroupName="Monday">
+                <td>
+                    <!-- <p-checkbox formControlName="day" value="1" label="Monday" [binary]="true"></p-checkbox> -->
+                    <p-checkbox name="Monday" formControlName="day" value="1" label="Monday"></p-checkbox>
+                </td>
+                <td>
+                    <!-- <input type="text" formControlName="startTime" placeholder="9:00 AM" pInputText class="w-100" /> -->
+                    <p-calendar class="w-100" placeholder="9:00 AM" formControlName="startTime" [showTime]="true" hourFormat="12"
+                        [timeOnly]="true" dateFormat="HH.MM"></p-calendar>
+
+                </td>
+                <td>
+                    <!-- <input type="text" formControlName="endTime" placeholder="11:00 AM" pInputText class="w-100" /> -->
+                    <p-calendar class="w-100" placeholder="10:00 AM" formControlName="endTime" [showTime]="true" hourFormat="12"
+                        [timeOnly]="true"></p-calendar>
+                </td>
+                <td>
+                    <p-dropdown formControlName="areaOfLaw" appendTo="body" [options]="areaOfLawlListCopy"
+                        placeholder="Select Area Of Law" optionLabel="label" optionValue="value"
+                        (onChange)="feeAreaOfLawChange($event,'Monday')">
+                    </p-dropdown>
+                </td>
+                <td class="px-2">
+                    <p-multiSelect selectedItemsLabel="{0} services selected" [showHeader]="false"
+                        [showToggleAll]="false" [filter]="false" [options]="areaOfLawlSelectedServicesFeeMon"
+                        formControlName="services"></p-multiSelect>
+
+                    <!-- <p-dropdown formControlName="services" appendTo="body" [options]="areaOfLawlSelectedServicesFee"
+                        placeholder="Select Multiple Services"></p-dropdown> -->
+                </td>
+                <td>
+                    <p-dropdown formControlName="type" appendTo="body" [options]="modes" placeholder="Select Mode">
+                    </p-dropdown>
+
+                </td>
+
+                <td>
+                    <input type="text" formControlName="location" placeholder="location" pInputText class="w-100" />
+                </td>
+                <td>
+                    <p-button [disabled]="roasterFormGroup.value.Monday.day[0] !=1" (click)="addTimeSlot(roasterFormGroup.value.Monday,'Monday')" label="add"
+                        icon="pi pi-plus" styleClass="p-button-sm">
+                        
+                    </p-button>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="8" class="text-end">
+                    <table *ngFor="let slot of timeSlots; let i = index" class="w-100">
+                        <tr *ngIf="slot.Day == 1">
+                            <td></td>
+                            <td>{{slot?.StartTime}}</td>
+                            <td>{{slot?.EndTime}}</td>
+                            <td>{{slot?.AreaofLaw}}</td>
+                            <td>{{slot?.Service}}</td>
+                            <td>{{slot?.ConsultationMode}}</td>
+                            <td>{{slot?.Location}}</td>
+                            <td>
+                                <p-button (click)="removeTimeSlot(i)" label="Remove" icon="pi pi-trash"
+                                    styleClass="p-button-sm">
+                                </p-button>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td colspan="8">
+                    <p-divider></p-divider>
+                </td>
+            </tr>
+            <tr formGroupName="Tuesday">
+                <td>
+                    <!-- <p-checkbox formControlName="day" value="2" label="Tuesday"></p-checkbox> -->
+                    <p-checkbox name="Tuesday" formControlName="day" value="2" label="Tuesday"></p-checkbox>
+                </td>
+                <td>
+                    <!-- <input type="text" formControlName="startTime" placeholder="9:00 AM" pInputText class="w-100" /> -->
+                    <p-calendar class="w-100" placeholder="9:00 AM" formControlName="startTime" [showTime]="true" hourFormat="12"
+                        [timeOnly]="true"></p-calendar>
+
+                </td>
+                <td>
+                    <!-- <input type="text" formControlName="endTime" placeholder="11:00 AM" pInputText class="w-100" /> -->
+                    <p-calendar class="w-100" placeholder="10:00 AM" formControlName="endTime" [showTime]="true" hourFormat="12"
+                        [timeOnly]="true"></p-calendar>
+                </td>
+                <td>
+                    <p-dropdown formControlName="areaOfLaw" appendTo="body" [options]="areaOfLawlListCopy"
+                        placeholder="Select Area Of Law" optionLabel="label" optionValue="value"
+                        (onChange)="feeAreaOfLawChange($event,'Tuesday')">
+                    </p-dropdown>
+                </td>
+                <td>
+                    <p-multiSelect selectedItemsLabel="{0} services selected" [showHeader]="false"
+                        [showToggleAll]="false" [filter]="false" [options]="areaOfLawlSelectedServicesFeeTue"
+                        formControlName="services"></p-multiSelect>
+                </td>
+                <td>
+                    <p-dropdown formControlName="type" appendTo="body" [options]="modes" placeholder="Select Mode">
+                    </p-dropdown>
+
+                </td>
+
+                <td>
+                    <input type="text" formControlName="location" placeholder="location" pInputText class="w-100" />
+                </td>
+                <td>
+                    <p-button [disabled]="roasterFormGroup.value.Tuesday.day[0] !=2" (click)="addTimeSlot(roasterFormGroup.value.Tuesday,'Tuesday')" label="add"
+                        icon="pi pi-plus" styleClass="p-button-sm">
+                    </p-button>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="8" class="text-end">
+                    <table *ngFor="let slot of timeSlots; let i = index" class="w-100">
+                        <tr *ngIf="slot.Day == 2">
+                            <td></td>
+                            <td>{{slot?.StartTime}}</td>
+                            <td>{{slot?.EndTime}}</td>
+                            <td>{{slot?.AreaofLaw}}</td>
+                            <td>{{slot?.Service}}</td>
+                            <td>{{slot?.ConsultationMode}}</td>
+                            <td>{{slot?.Location}}</td>
+                            <td>
+                                <p-button (click)="removeTimeSlot(i)" label="Remove" icon="pi pi-trash"
+                                    styleClass="p-button-sm">
+                                </p-button>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="8">
+                    <p-divider></p-divider>
+                </td>
+            </tr>
+            <tr formGroupName="Wednesday">
+                <td>
+                    <!-- <p-checkbox formControlName="day" value="3" label="Wednesday"></p-checkbox> -->
+                    <p-checkbox name="Wednesday" formControlName="day" value="3" label="Wednesday"></p-checkbox>
+                </td>
+                <td>
+                    <!-- <input type="text" formControlName="startTime" placeholder="9:00 AM" pInputText class="w-100" /> -->
+                    <p-calendar class="w-100" placeholder="9:00 AM" formControlName="startTime" [showTime]="true" hourFormat="12"
+                        [timeOnly]="true"></p-calendar>
+
+                </td>
+                <td>
+                    <!-- <input type="text" formControlName="endTime" placeholder="11:00 AM" pInputText class="w-100" /> -->
+                    <p-calendar class="w-100" placeholder="10:00 AM" formControlName="endTime" [showTime]="true" hourFormat="12"
+                        [timeOnly]="true"></p-calendar>
+                </td>
+                <td>
+                    <p-dropdown formControlName="areaOfLaw" appendTo="body" [options]="areaOfLawlListCopy"
+                        placeholder="Select Area Of Law" optionLabel="label" optionValue="value"
+                        (onChange)="feeAreaOfLawChange($event,'Wednesday')">
+                    </p-dropdown>
+                </td>
+                <td>
+                    <p-multiSelect selectedItemsLabel="{0} services selected" [showHeader]="false"
+                        [showToggleAll]="false" [filter]="false" [options]="areaOfLawlSelectedServicesFeeWed"
+                        formControlName="services"></p-multiSelect>
+                </td>
+                <td>
+                    <p-dropdown formControlName="type" appendTo="body" [options]="modes" placeholder="Select Mode">
+                    </p-dropdown>
+
+                </td>
+
+                <td>
+                    <input type="text" formControlName="location" placeholder="location" pInputText class="w-100" />
+                </td>
+                <td>
+                    <p-button [disabled]="roasterFormGroup.value.Wednesday.day[0] !=3" (click)="addTimeSlot(roasterFormGroup.value.Wednesday,'Wednesday')" label="add"
+                        icon="pi pi-plus" styleClass="p-button-sm">
+                    </p-button>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="8" class="text-end">
+                    <table *ngFor="let slot of timeSlots; let i = index" class="w-100">
+                        <tr *ngIf="slot.Day == 3">
+                            <td></td>
+                            <td>{{slot?.StartTime}}</td>
+                            <td>{{slot?.EndTime}}</td>
+                            <td>{{slot?.AreaofLaw}}</td>
+                            <td>{{slot?.Service}}</td>
+                            <td>{{slot?.ConsultationMode}}</td>
+                            <td>{{slot?.Location}}</td>
+                            <td>
+                                <p-button (click)="removeTimeSlot(i)" label="Remove" icon="pi pi-trash"
+                                    styleClass="p-button-sm">
+                                </p-button>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="8">
+                    <p-divider></p-divider>
+                </td>
+            </tr>
+            <tr formGroupName="Thursday">
+                <td>
+                    <!-- <p-checkbox formControlName="day" value="4" label="Thursday"></p-checkbox> -->
+                    <p-checkbox name="Thursday" formControlName="day" value="4" label="Thursday"></p-checkbox>
+                </td>
+                <td>
+                    <!-- <input type="text" formControlName="startTime" placeholder="9:00 AM" pInputText class="w-100" /> -->
+                    <p-calendar class="w-100" placeholder="9:00 AM" formControlName="startTime" [showTime]="true" hourFormat="12"
+                        [timeOnly]="true"></p-calendar>
+                </td>
+                <td>
+                    <!-- <input type="text" formControlName="endTime" placeholder="11:00 AM" pInputText class="w-100" /> -->
+                    <p-calendar class="w-100" placeholder="10:00 AM" formControlName="endTime" [showTime]="true" hourFormat="12"
+                        [timeOnly]="true"></p-calendar>
+                </td>
+                <td>
+                    <p-dropdown formControlName="areaOfLaw" appendTo="body" [options]="areaOfLawlListCopy"
+                        placeholder="Select Area Of Law" optionLabel="label" optionValue="value"
+                        (onChange)="feeAreaOfLawChange($event,'Thursday')">
+                    </p-dropdown>
+                </td>
+                <td>
+                    <p-multiSelect selectedItemsLabel="{0} services selected" [showHeader]="false"
+                        [showToggleAll]="false" [filter]="false" [options]="areaOfLawlSelectedServicesFeeThr"
+                        formControlName="services"></p-multiSelect>
+                </td>
+                <td>
+                    <p-dropdown formControlName="type" appendTo="body" [options]="modes" placeholder="Select Mode">
+                    </p-dropdown>
+
+                </td>
+
+                <td>
+                    <input type="text" formControlName="location" placeholder="location" pInputText class="w-100" />
+                </td>
+                <td>
+                    <p-button [disabled]="roasterFormGroup.value.Thursday.day[0] !=4" (click)="addTimeSlot(roasterFormGroup.value.Thursday,'Thursday')" label="add"
+                        icon="pi pi-plus" styleClass="p-button-sm">
+                    </p-button>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="8" class="text-end">
+                    <table *ngFor="let slot of timeSlots; let i = index" class="w-100">
+                        <tr *ngIf="slot.Day == 4">
+                            <td></td>
+                            <td>{{slot?.StartTime}}</td>
+                            <td>{{slot?.EndTime}}</td>
+                            <td>{{slot?.AreaofLaw}}</td>
+                            <td>{{slot?.Service}}</td>
+                            <td>{{slot?.ConsultationMode}}</td>
+                            <td>{{slot?.Location}}</td>
+                            <td>
+                                <p-button (click)="removeTimeSlot(i)" label="Remove" icon="pi pi-trash"
+                                    styleClass="p-button-sm">
+                                </p-button>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="8">
+                    <p-divider></p-divider>
+                </td>
+            </tr>
+            <tr formGroupName="Friday">
+                <td>
+                    <!-- <p-checkbox formControlName="day" value="5" label="Friday"></p-checkbox> -->
+                    <p-checkbox name="Friday" formControlName="day" value="5" label="Friday"></p-checkbox>
+                </td>
+                <td>
+                    <!-- <input type="text" formControlName="startTime" placeholder="9:00 AM" pInputText class="w-100" /> -->
+                    <p-calendar class="w-100" placeholder="9:00 AM" formControlName="startTime" [showTime]="true" hourFormat="12"
+                        [timeOnly]="true"></p-calendar>
+
+                </td>
+                <td>
+                    <!-- <input type="text" formControlName="endTime" placeholder="11:00 AM" pInputText class="w-100" /> -->
+                    <p-calendar class="w-100" placeholder="10:00 AM" formControlName="endTime" [showTime]="true" hourFormat="12"
+                        [timeOnly]="true"></p-calendar>
+                </td>
+                <td>
+                    <p-dropdown formControlName="areaOfLaw" appendTo="body" [options]="areaOfLawlListCopy"
+                        placeholder="Select Area Of Law" optionLabel="label" optionValue="value"
+                        (onChange)="feeAreaOfLawChange($event,'Friday')">
+                    </p-dropdown>
+                </td>
+                <td>
+                    <p-multiSelect selectedItemsLabel="{0} services selected" [showHeader]="false"
+                        [showToggleAll]="false" [filter]="false" [options]="areaOfLawlSelectedServicesFeeFri"
+                        formControlName="services"></p-multiSelect>
+                </td>
+                <td>
+                    <p-dropdown formControlName="type" appendTo="body" [options]="modes" placeholder="Select Mode">
+                    </p-dropdown>
+
+                </td>
+
+                <td>
+                    <input type="text" formControlName="location" placeholder="location" pInputText class="w-100" />
+                </td>
+                <td>
+                    <p-button [disabled]="roasterFormGroup.value.Friday.day[0] !=5" (click)="addTimeSlot(roasterFormGroup.value.Friday,'Friday')" label="add"
+                        icon="pi pi-plus" styleClass="p-button-sm">
+                    </p-button>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td colspan="8" class="text-end">
+                    <table *ngFor="let slot of timeSlots; let i = index" class="w-100">
+                        <tr *ngIf="slot.Day == 5">
+                            <td></td>
+                            <td>{{slot?.StartTime}}</td>
+                            <td>{{slot?.EndTime}}</td>
+                            <td>{{slot?.AreaofLaw}}</td>
+                            <td>{{slot?.Service}}</td>
+                            <td>{{slot?.ConsultationMode}}</td>
+                            <td>{{slot?.Location}}</td>
+                            <td>
+                                <p-button (click)="removeTimeSlot(i)" label="Remove" icon="pi pi-trash"
+                                    styleClass="p-button-sm">
+                                </p-button>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td colspan="8">
+                    <p-divider></p-divider>
+                </td>
+            </tr>
+            <tr formGroupName="Saturday">
+                <td>
+                    <!-- <p-checkbox formControlName="day" value="6" label="Saturday"></p-checkbox> -->
+                    <p-checkbox name="Saturday" formControlName="day" value="6" label="Saturday"></p-checkbox>
+                </td>
+                <td>
+                    <!-- <input type="text" formControlName="startTime" placeholder="9:00 AM" pInputText class="w-100" /> -->
+                    <p-calendar class="w-100" placeholder="9:00 AM" formControlName="startTime" [showTime]="true" hourFormat="12"
+                        [timeOnly]="true"></p-calendar>
+                </td>
+                <td>
+                    <!-- <input type="text" formControlName="endTime" placeholder="11:00 AM" pInputText class="w-100" /> -->
+                    <p-calendar class="w-100" placeholder="10:00 AM" formControlName="endTime" [showTime]="true" hourFormat="12"
+                        [timeOnly]="true"></p-calendar>
+                </td>
+                <td>
+                    <p-dropdown formControlName="areaOfLaw" appendTo="body" [options]="areaOfLawlListCopy"
+                        placeholder="Select Area Of Law" optionLabel="label" optionValue="value"
+                        (onChange)="feeAreaOfLawChange($event,'Saturday')">
+                    </p-dropdown>
+                </td>
+                <td>
+                    <p-multiSelect selectedItemsLabel="{0} services selected" [showHeader]="false"
+                        [showToggleAll]="false" [filter]="false" [options]="areaOfLawlSelectedServicesFeeSat"
+                        formControlName="services"></p-multiSelect>
+                </td>
+                <td>
+                    <p-dropdown formControlName="type" appendTo="body" [options]="modes" placeholder="Select Mode">
+                    </p-dropdown>
+
+                </td>
+
+                <td>
+                    <input type="text" formControlName="location" placeholder="location" pInputText class="w-100" />
+                </td>
+                <td>
+                    <p-button [disabled]="roasterFormGroup.value.Saturday.day[0] !=6" (click)="addTimeSlot(roasterFormGroup.value.Saturday,'Saturday')" label="add"
+                        icon="pi pi-plus" styleClass="p-button-sm">
+                    </p-button>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="8" class="text-end">
+                    <table *ngFor="let slot of timeSlots; let i = index" class="w-100">
+                        <tr *ngIf="slot.Day == 6">
+                            <td></td>
+                            <td>{{slot?.StartTime}}</td>
+                            <td>{{slot?.EndTime}}</td>
+                            <td>{{slot?.AreaofLaw}}</td>
+                            <td>{{slot?.Service}}</td>
+                            <td>{{slot?.ConsultationMode}}</td>
+                            <td>{{slot?.Location}}</td>
+                            <td>
+                                <p-button (click)="removeTimeSlot(i)" label="Remove" icon="pi pi-trash"
+                                    styleClass="p-button-sm">
+                                </p-button>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="8">
+                    <p-divider></p-divider>
+                </td>
+            </tr>
+            <tr formGroupName="Sunday">
+                <td>
+                    <!-- <p-checkbox formControlName="day" value="0" label="Sunday"></p-checkbox> -->
+                    <p-checkbox name="Sunday" formControlName="day" value="0" label="Sunday"></p-checkbox>
+                </td>
+                <td>
+                    <!-- <input type="text" formControlName="startTime" placeholder="9:00 AM" pInputText class="w-100" /> -->
+                    <p-calendar class="w-100" placeholder="9:00 AM" formControlName="startTime" [showTime]="true" hourFormat="12"
+                        [timeOnly]="true"></p-calendar>
+                </td>
+                <td>
+                    <!-- <input type="text" formControlName="endTime" placeholder="11:00 AM" pInputText class="w-100" /> -->
+                    <p-calendar class="w-100" placeholder="10:00 AM" formControlName="endTime" [showTime]="true" hourFormat="12"
+                        [timeOnly]="true"></p-calendar>
+                </td>
+                <td>
+                    <p-dropdown formControlName="areaOfLaw" appendTo="body" [options]="areaOfLawlListCopy"
+                        placeholder="Select Area Of Law" optionLabel="label" optionValue="value"
+                        (onChange)="feeAreaOfLawChange($event,'Sunday')">
+                    </p-dropdown>
+                </td>
+                <td>
+                    <p-multiSelect selectedItemsLabel="{0} services selected" [showHeader]="false"
+                        [showToggleAll]="false" [filter]="false" [options]="areaOfLawlSelectedServicesFeeSun"
+                        formControlName="services"></p-multiSelect>
+                </td>
+                <td>
+                    <p-dropdown formControlName="type" appendTo="body" [options]="modes" placeholder="Select Mode">
+                    </p-dropdown>
+
+                </td>
+
+                <td>
+                    <input type="text" formControlName="location" placeholder="location" pInputText class="w-100" />
+                </td>
+                <td>
+                    <p-button [disabled]="roasterFormGroup.value.Sunday.day[0] !=0" (click)="addTimeSlot(roasterFormGroup.value.Sunday,'Sunday')" label="add"
+                        icon="pi pi-plus" styleClass="p-button-sm">
+                    </p-button>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="8" class="text-end">
+                    <table *ngFor="let slot of timeSlots; let i = index" class="w-100">
+                        <tr *ngIf="slot.Day == 7">
+                            <td></td>
+                            <td>{{slot?.StartTime}}</td>
+                            <td>{{slot?.EndTime}}</td>
+                            <td>{{slot?.AreaofLaw}}</td>
+                            <td>{{slot?.Service}}</td>
+                            <td>{{slot?.ConsultationMode}}</td>
+                            <td>{{slot?.Location}}</td>
+                            <td>
+                                <p-button (click)="removeTimeSlot(i)" label="Remove" icon="pi pi-trash"
+                                    styleClass="p-button-sm">
+                                </p-button>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="8">
+                    <p-divider></p-divider>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>

@@ -1,0 +1,207 @@
+<div class="container">
+    <div>
+        <a [routerLink]="['../home']">Go To Home</a><br>
+    </div>
+    <h4>File Manager</h4>
+
+    <p-card>
+
+
+        <div class="row">
+            <div class="col-3">
+                <!-- <p-menubar [model]="menubar"> </p-menubar> -->
+
+                <p-splitButton label="New" icon="pi pi-plus" [model]="menubar" styleClass="p-button-success">
+                </p-splitButton>
+
+                <!-- <p-button iconPos="right" class="w-100 mb-3" (click)="displayBasic=true" label="New" icon="pi pi-plus"  [model]="items">
+                </p-button> -->
+
+                <br>
+                <br>
+                <p-tieredMenu class="w-100 mt-3" [model]="items"></p-tieredMenu>
+                <br>
+
+                <p>Storage Used: {{storageUsed?.StorageUsed}}</p>
+
+            </div>
+            <div class="col-9">
+
+
+                <div *ngIf="displaySection==1">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li *ngFor="let breadcrumb of breadcrumbList;let i = index" class="breadcrumb-item"
+                                [ngClass]="{ 'active': i===breadcrumbList.length-1 }">
+                                <a *ngIf="i<breadcrumbList.length-1" href="javascript: void(0);"
+                                    (click)="loadResources(breadcrumb.NavID)">{{breadcrumb.NavText}}</a>
+                                <span *ngIf="i===(breadcrumbList.length-1)">{{breadcrumb.NavText}}</span>
+                            </li>
+                            <!-- <li class="breadcrumb-item active" aria-current="page">Library</li> -->
+                        </ol>
+                    </nav>
+
+                    <p *ngIf="!isLoadingData && resourcesList.length===0">No Item Found!</p>
+
+                    <div class="row">
+                        <div *ngFor="let resource of resourcesList;let i = index" class="col-md-3">
+                            <div *ngIf="resource.ResourceType ===1"
+                                (click)="loadResources(resource.Id);$event.stopPropagation()" class="resource-wrapper">
+                                {{resource.ResourseName}}
+                                <button [disabled]="isFormsubmitted" pButton pRipple icon="pi pi-check"
+                                    class="p-button-danger p-button-rounded p-button-text" #btn type="button"
+                                    icon="pi pi-trash"
+                                    (click)="deleteModalOpen(resource,i);$event.stopPropagation()"></button>
+                            </div>
+                            <div *ngIf="resource.ResourceType ===2" class="resource-wrapper">
+                                {{resource.ResourseName}}
+                                <button [disabled]="isFormsubmitted" pButton pRipple icon="pi pi-check"
+                                    class="p-button-danger p-button-rounded p-button-text" #btn type="button"
+                                    icon="pi pi-trash"
+                                    (click)="deleteModalOpen(resource,i);$event.stopPropagation()"></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="isLoadingData" class="d-flex justify-content-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="displaySection==2">
+                    <div *ngIf="isLoadingData" class="d-flex justify-content-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <p *ngIf="!isLoadingData && sharedResources.length===0">No Item Found!</p>
+
+                </div>
+                <div *ngIf="displaySection==3">
+
+                    <p-table [value]="trashedResources" responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Path</th>
+                                <th>Actions</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-trashFile let-index="rowIndex">
+                            <tr>
+                                <td>{{trashFile.ResourseName}}</td>
+                                <td>{{trashFile.ResourceType}}</td>
+                                <td>{{trashFile.ResoursePath==='' ? 'Home':'Home/'+trashFile.ResoursePath}}</td>
+                                <td>
+                                    <p-button [disabled]="isFormsubmitted"
+                                        (click)="restoreModalOpen(trashFile.Id,index)" type="button" pRipple
+                                        label="Restore" icon="pi pi-undo" styleClass="p-button-success me-3"></p-button>
+                                    <p-button [disabled]="isFormsubmitted"
+                                        (click)="parmanentDeleteModalOpen(trashFile,index)" type="button" pRipple
+                                        label="Delete Parmanent" icon="pi pi-trash" styleClass="p-button-danger">
+                                    </p-button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="7">No Resourse Found.</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+
+                    <div *ngIf="isLoadingData" class="d-flex justify-content-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </p-card>
+</div>
+
+
+
+<!-- <p>The default dropzone.</p>
+
+<ngx-dropzone (change)="onSelect($event)">
+    <ngx-dropzone-label>Drop it, baby!</ngx-dropzone-label>
+    <ngx-dropzone-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f)">
+        <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+    </ngx-dropzone-preview>
+</ngx-dropzone>
+
+<p>The disabled but expanding dropzone.</p>
+
+<ngx-dropzone (change)="onSelect($event)" [disabled]="true" [expandable]="true">
+    <ngx-dropzone-label>Drop it, baby!</ngx-dropzone-label>
+    <ngx-dropzone-preview *ngFor="let f of files">
+        <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+    </ngx-dropzone-preview>
+</ngx-dropzone>
+
+<p>A custom dropzone.</p>
+
+<div class="custom-dropzone" ngx-dropzone [accept]="'image/*'" (change)="onSelect($event)">
+    <ngx-dropzone-label>
+        <div>
+            <h2>My custom dropzone</h2>
+        </div>
+    </ngx-dropzone-label>
+    <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f" [removable]="true"
+        (removed)="onRemove(f)">
+        <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+    </ngx-dropzone-image-preview>
+</div>
+
+<button (click)="uploadFile()">uploadFile</button> -->
+
+
+<p-dialog [closable]="!isFormsubmitted" [closeOnEscape]="!isFormsubmitted" header="Creater Folder"
+    [(visible)]="displayBasic" [modal]="true" [draggable]="false" [resizable]="true" [style]="{width: '70vw'}">
+
+    <form [formGroup]="folderForm" autocomplete="off">
+        <input type="text" formControlName="name" pInputText class="w-100" />
+        <div *ngIf="submitted && one.name.errors" class="mt-1 invalid-feedback d-block">
+            <div *ngIf="one.name.errors.required">Folder name required</div>
+        </div>
+    </form>
+
+    <ng-template pTemplate="footer">
+        <p-button [disabled]="isFormsubmitted" (click)="displayBasic=false" label="Close" styleClass="p-button-text">
+        </p-button>
+        <p-button [disabled]="isFormsubmitted" (click)="onSubmitCreaterFolder()" [label]="false ? 'Update' : 'Save'"
+            styleClass="p-button-text">
+        </p-button>
+    </ng-template>
+</p-dialog>
+
+
+<p-dialog [closable]="!isFormsubmitted" [closeOnEscape]="!isFormsubmitted" header="Choose Files"
+    [(visible)]="displayFileModal" [modal]="true" [draggable]="false" [resizable]="true" [style]="{width: '70vw'}">
+
+    <div class="custom-dropzone" [disabled]="isFormsubmitted" ngx-dropzone [accept]="'image/*'"
+        (change)="onSelect($event)">
+        <ngx-dropzone-label>
+            <div>
+                <i class="pi pi-cloud-upload" style="font-size: 2rem"></i>
+                <h4>Drop files here or click to upload.</h4>
+                <p>These images will be part of your file manager</p>
+            </div>
+        </ngx-dropzone-label>
+        <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f"
+            [removable]="true" (removed)="onRemove(f)">
+            <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+        </ngx-dropzone-image-preview>
+
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button [disabled]="isFormsubmitted" (click)="displayFileModal=false;this.files = [];" label="Close"
+            styleClass="p-button-text"></p-button>
+        <p-button [disabled]="isFormsubmitted" (click)="uploadFile()" label="Upload" styleClass="p-button-text">
+        </p-button>
+    </ng-template>
+</p-dialog>

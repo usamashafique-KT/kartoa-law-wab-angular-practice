@@ -1,0 +1,935 @@
+<div class="container">
+    <div>
+        <a [routerLink]="['../home']">Go To Home</a><br>
+    </div>
+    <h4>Add Profile Sections</h4>
+
+    <p-panel class="mb-3" header="About Us" [collapsed]="lawyerProfileSections?.AboutUs == null">
+        <ng-template pTemplate="icons">
+
+            <button *ngIf="lawyerProfileSections?.AboutUs == null" pButton class="p-panel-header-icon p-link"
+                (click)="showBasicDialog(1,'About Us')" icon="pi pi-plus-circle" label="" iconPos="right">
+            </button>
+
+            <button *ngIf="lawyerProfileSections?.AboutUs != null" pButton class="p-panel-header-icon p-link"
+                (click)="showBasicDialog(1,'About Us')" icon="pi pi-pencil" label="" iconPos="right">
+            </button>
+
+        </ng-template>
+
+        <ng-template pTemplate="content">
+            <div *ngIf="lawyerProfileSections?.AboutUs != null">
+                <p> {{ lawyerProfileSections?.AboutUs?.Text }}</p>
+                <p> Privacy : {{ lawyerProfileSections?.AboutUs?.Privacy == 1 ? "Public" : "Private" }}</p>
+            </div>
+        </ng-template>
+    </p-panel>
+
+    <br>
+
+    <p-panel class="mb-3" header="Experience" [collapsed]="lawyerProfileSections?.Experience == null">
+        <ng-template pTemplate="icons">
+
+            <button *ngIf="lawyerProfileSections?.Experience == null" pButton class="p-panel-header-icon p-link"
+                (click)="showBasicDialog(2,'Experience')" icon="pi pi-plus-circle" label="" iconPos="right">
+            </button>
+
+            <button *ngIf="lawyerProfileSections?.Experience != null" pButton class="p-panel-header-icon p-link"
+                (click)="showBasicDialog(2,'Experience')" icon="pi pi-pencil" label="" iconPos="right">
+            </button>
+
+        </ng-template>
+
+        <ng-template pTemplate="content">
+            <div *ngIf="lawyerProfileSections?.Experience != null">
+                <p> {{ lawyerProfileSections?.Experience?.Description }}</p>
+                <p> Privacy : {{ lawyerProfileSections?.Experience?.Privacy == 1 ? "Public" : "Private" }}</p>
+            </div>
+        </ng-template>
+    </p-panel>
+
+    <br>
+
+    <p-panel class="mb-3" header="Language" [collapsed]="lawyerProfileSections?.Languages == null">
+        <ng-template pTemplate="icons">
+
+            <button *ngIf="lawyerProfileSections?.Languages == null" pButton class="p-panel-header-icon p-link"
+                (click)="showBasicDialog(3,'Languages')" icon="pi pi-plus-circle" label="" iconPos="right">
+            </button>
+
+            <button *ngIf="lawyerProfileSections?.Languages != null" pButton class="p-panel-header-icon p-link"
+                (click)="showBasicDialog(3,'Languages')" icon="pi pi-pencil" label="" iconPos="right">
+            </button>
+
+        </ng-template>
+
+        <ng-template pTemplate="content">
+            <div *ngIf="lawyerProfileSections?.Languages != null">
+                <div class="flex align-items-center">
+                    <p-chip *ngFor="let language of lawyerProfileSections?.Languages?.Languages" [label]="language"
+                        styleClass="me-2"></p-chip>
+                </div>
+                <p> Privacy : {{ lawyerProfileSections?.Languages?.Privacy == 1 ? "Public" : "Private" }}</p>
+            </div>
+        </ng-template>
+    </p-panel>
+
+    <br>
+
+    <p-panel class="mb-3" header="Social Media" [collapsed]="lawyerProfileSections?.SocialMedia == null">
+        <ng-template pTemplate="icons">
+
+            <button *ngIf="lawyerProfileSections?.SocialMedia == null || lawyerProfileSections?.SocialMedia?.length == 0" pButton class="p-panel-header-icon p-link"
+                (click)="showBasicDialog(4,'Social Media')" icon="pi pi-plus-circle" label="" iconPos="right">
+            </button>
+
+            <button *ngIf="lawyerProfileSections?.SocialMedia?.length > 0" pButton class="p-panel-header-icon p-link"
+                (click)="showBasicDialog(4,'Social Media')" icon="pi pi-pencil" label="" iconPos="right">
+            </button>
+
+        </ng-template>
+
+        <ng-template pTemplate="content">
+            <p-table [value]="lawyerProfileSections?.SocialMedia" responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Type</th>
+                        <th>Url</th>
+                        <th>Privacy</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-social>
+                    <tr>
+                        <td>{{showSocialType(social.Type)}}</td>
+                        <td>{{social.Url}}</td>
+                        <td>{{social.Privacy == 1 ? "Public" : "Private"}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+        </ng-template>
+    </p-panel>
+
+    <br>
+
+    <p-panel class="mb-3" header="Services" [collapsed]="lawyerProfileSections?.Services == null">
+        <ng-template pTemplate="icons">
+
+            <button *ngIf="lawyerProfileSections?.Services == null" pButton class="p-panel-header-icon p-link"
+                (click)="showBasicDialog(5,'Services')" icon="pi pi-plus-circle" label="" iconPos="right">
+            </button>
+
+            <button *ngIf="lawyerProfileSections?.Services?.length > 0" pButton class="p-panel-header-icon p-link"
+                (click)="showBasicDialog(5,'Services')" icon="pi pi-pencil" label="" iconPos="right">
+            </button>
+
+        </ng-template>
+
+        <ng-template pTemplate="content">
+            <p-table [value]="lawyerProfileSections?.Services" responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>AreaOfLaw</th>
+                        <th>Service</th>
+                        <th>Privacy</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-service>
+                    <tr>
+                        <td>{{showAreaOfLaw(service.AreaOfLaw)}}</td>
+                        <td>
+                            <div class="flex align-items-center">
+                                <p-chip *ngFor="let srv of service.Service" [label]="srv" styleClass="me-2"></p-chip>
+                            </div>
+                        </td>
+                        <td>{{service.Privacy == 1 ? "Public" : "Private"}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+        </ng-template>
+    </p-panel>
+
+    <br>
+
+    <p-panel class="mb-3" header="Consultation Mode" [collapsed]="lawyerProfileSections?.ConsultationMode == null">
+        <ng-template pTemplate="icons">
+
+            <button *ngIf="lawyerProfileSections?.ConsultationMode == null" pButton class="p-panel-header-icon p-link"
+                (click)="showBasicDialog(6,'Consultation Mode')" icon="pi pi-plus-circle" label="" iconPos="right">
+            </button>
+
+            <button *ngIf="lawyerProfileSections?.ConsultationMode != null" pButton class="p-panel-header-icon p-link"
+                (click)="showBasicDialog(6,'Consultation Mode')" icon="pi pi-pencil" label="" iconPos="right">
+            </button>
+
+        </ng-template>
+
+        <ng-template pTemplate="content">
+            <div *ngIf="lawyerProfileSections?.ConsultationMode != null">
+                <div class="flex align-items-center">
+                    <p-chip *ngFor="let mode of lawyerProfileSections?.ConsultationMode?.Mode" [label]="mode"
+                        styleClass="me-2"></p-chip>
+                </div>
+                <p> Privacy : {{ lawyerProfileSections?.ConsultationMode?.Privacy == 1 ? "Public" : "Private" }}</p>
+            </div>
+        </ng-template>
+    </p-panel>
+
+    <br>
+
+    <p-panel class="mb-3" header="Addresses" [collapsed]="lawyerProfileSections?.Addresses == null">
+        <ng-template pTemplate="icons">
+
+            <button *ngIf="lawyerProfileSections?.Addresses == null || lawyerProfileSections?.Addresses?.length == 0" pButton class="p-panel-header-icon p-link"
+                (click)="showBasicDialog(7,'Addresses')" icon="pi pi-plus-circle" label="" iconPos="right">
+            </button>
+
+            <button *ngIf="lawyerProfileSections?.Addresses?.length > 0" pButton class="p-panel-header-icon p-link"
+                (click)="showBasicDialog(7,'Addresses')" icon="pi pi-pencil" label="" iconPos="right">
+            </button>
+
+        </ng-template>
+
+        <ng-template pTemplate="content">
+            <p-table [value]="lawyerProfileSections?.Addresses" responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Type</th>
+                        <th>Street</th>
+                        <th>City</th>
+                        <th>State</th>
+                        <th>Country</th>
+                        <th>PostalCode</th>
+                        <th>Privacy</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-address>
+                    <tr>
+                        <td>{{showAddressType(address.Type)}}</td>
+                        <td>{{address.Street}}</td>
+                        <td>{{address.City}}</td>
+                        <td>{{address.State}}</td>
+                        <td>{{address.Country}}</td>
+                        <td>{{address.PostalCode}}</td>
+                        <td>{{address.Privacy == 1 ? "Public" : "Private"}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+        </ng-template>
+    </p-panel>
+
+    <br>
+
+    <p-panel class="mb-3" header="Job Title" [collapsed]="lawyerProfileSections?.JobTitle == null">
+        <ng-template pTemplate="icons">
+
+            <button *ngIf="lawyerProfileSections?.JobTitle == null" pButton class="p-panel-header-icon p-link"
+                (click)="showBasicDialog(8,'Job Title')" icon="pi pi-plus-circle" label="" iconPos="right">
+            </button>
+
+            <button *ngIf="lawyerProfileSections?.JobTitle != null" pButton class="p-panel-header-icon p-link"
+                (click)="showBasicDialog(8,'Job Title')" icon="pi pi-pencil" label="" iconPos="right">
+            </button>
+
+        </ng-template>
+
+        <ng-template pTemplate="content">
+            <div *ngIf="lawyerProfileSections?.JobTitle != null">
+                <p> Title : {{ lawyerProfileSections?.JobTitle?.Title }}</p>
+                <p> Privacy : {{ lawyerProfileSections?.JobTitle?.Privacy == 1 ? "Public" : "Private" }}</p>
+            </div>
+        </ng-template>
+    </p-panel>
+
+    <br>
+
+    <p-panel class="mb-3" header="Video Introduction" [collapsed]="lawyerProfileSections?.VideoIntro == null">
+        <ng-template pTemplate="icons">
+
+            <button *ngIf="lawyerProfileSections?.VideoIntro == null" pButton class="p-panel-header-icon p-link"
+                (click)="showBasicDialog(9,'Video Introduction')" icon="pi pi-plus-circle" label="" iconPos="right">
+            </button>
+
+            <button *ngIf="lawyerProfileSections?.VideoIntro != null" pButton class="p-panel-header-icon p-link"
+                (click)="showBasicDialog(9,'Video Introduction')" icon="pi pi-pencil" label="" iconPos="right">
+            </button>
+
+        </ng-template>
+
+        <ng-template pTemplate="content">
+            <div *ngIf="lawyerProfileSections?.VideoIntro != null">
+                <p> Source : {{ lawyerProfileSections?.VideoIntro?.Source }}</p>
+                <p> Privacy : {{ lawyerProfileSections?.VideoIntro?.Privacy == 1 ? "Public" : "Private" }}</p>
+            </div>
+        </ng-template>
+    </p-panel>
+
+    <br>
+
+    <p-panel class="mb-3" header="Qualification" [collapsed]="lawyerProfileSections?.Qualification == null">
+        <ng-template pTemplate="icons">
+
+            <button *ngIf="lawyerProfileSections?.Qualification == null" pButton class="p-panel-header-icon p-link"
+                (click)="showBasicDialog(10,'Qualification')" icon="pi pi-plus-circle" label="" iconPos="right">
+            </button>
+
+            <button *ngIf="lawyerProfileSections?.Qualification != null" pButton class="p-panel-header-icon p-link"
+                (click)="showBasicDialog(10,'Qualification')" icon="pi pi-pencil" label="" iconPos="right">
+            </button>
+
+        </ng-template>
+
+        <ng-template pTemplate="content">
+            <div *ngIf="lawyerProfileSections?.Qualification != null">
+                <p> Data : {{ lawyerProfileSections?.Qualification?.Data }}</p>
+                <p> Privacy : {{ lawyerProfileSections?.Qualification?.Privacy == 1 ? "Public" : "Private" }}</p>
+            </div>
+        </ng-template>
+    </p-panel>
+
+    <br>
+
+    <p-panel class="mb-3" header="Services Fee" [collapsed]="lawyerProfileSections?.ServicesFee == null">
+        <ng-template pTemplate="icons">
+
+            <button *ngIf="lawyerProfileSections?.ServicesFee == null || lawyerProfileSections?.ServicesFee?.length == 0" pButton class="p-panel-header-icon p-link"
+                (click)="showBasicDialog(11,'Fee')" icon="pi pi-plus-circle" label="" iconPos="right">
+            </button>
+
+            <button *ngIf="lawyerProfileSections?.ServicesFee?.length > 0" pButton class="p-panel-header-icon p-link"
+                (click)="showBasicDialog(11,'Fee')" icon="pi pi-pencil" label="" iconPos="right">
+            </button>
+
+        </ng-template>
+
+        <ng-template pTemplate="content">
+            <p-table [value]="lawyerProfileSections?.ServicesFee" responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>AreaOfLaw</th>
+                        <th>Service</th>
+                        <th>Type</th>
+                        <th>Charges</th>
+                        <th>Privacy</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-fee>
+                    <tr>
+                        <td>{{showAreaOfLaw(fee.AreaOfLaw)}}</td>
+                        <td>{{fee.Service}}</td>
+                        <td>{{fee.Type}}</td>
+                        <td>{{fee.Charges}}</td>
+                        <td>{{fee.Privacy == 1 ? "Public" : "Private"}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </ng-template>
+    </p-panel>
+    <br>
+    <br>
+
+
+    <p-dialog [header]="modalTitle" [(visible)]="displayBasic" [modal]="true" [draggable]="false" [resizable]="true"
+        [style]="{width: '70vw'}">
+
+        <div *ngIf="openSection==1">
+            <form [formGroup]="aboutUsSection" autocomplete="off" (ngSubmit)="onSubmitAboutUs()">
+                <div class="row">
+
+                    <div class="col-12">
+                        <textarea class="w-100" placeholder="Enter about us " formControlName="Text" rows="5" cols="30"
+                            pInputTextarea autoResize="autoResize"></textarea>
+                        <div *ngIf="submitted && one.Text.errors" class="mt-1 invalid-feedback d-block">
+                            <div *ngIf="one.Text.errors.required">Text required</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="mb-2 col-6">
+                        <p-dropdown appendTo="body" [options]="privacies" formControlName="Privacy"
+                            placeholder="Select Privacy" optionLabel="label" optionValue="value"></p-dropdown>
+                    </div>
+                    <div class="mb-2 col-6">
+                        <button [disabled]="isFormSubmitted" class="btn btn-success p-3 w-100" type="submit">
+                            {{ lawyerProfileSections?.AboutUs ? 'Update' : 'Save'}}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div *ngIf="openSection==2">
+            <form [formGroup]="experienceSection" autocomplete="off" (ngSubmit)="onSubmitExperience()">
+                <div class="row">
+
+                    <div class="col-12">
+                        <textarea class="w-100" placeholder="Enter description " formControlName="Description" rows="5"
+                            cols="30" pInputTextarea autoResize="autoResize"></textarea>
+                        <div *ngIf="submitted && exp.Description.errors" class="mt-1 invalid-feedback d-block">
+                            <div *ngIf="exp.Description.errors.required">Description required</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="mb-2 col-6">
+                        <p-dropdown appendTo="body" [options]="privacies" formControlName="Privacy"
+                            placeholder="Select Privacy" optionLabel="label" optionValue="value"></p-dropdown>
+                    </div>
+                    <div class="mb-2 col-6">
+                        <button [disabled]="isFormSubmitted" class="btn btn-success p-3 w-100" type="submit">
+                            {{ lawyerProfileSections?.Experience ? 'Update' : 'Save'}}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div *ngIf="openSection==3">
+            <form [formGroup]="languagesSection" autocomplete="off" (ngSubmit)="onSubmitLanguages()">
+                <div class="row">
+
+                    <div class="mb-2 col-12">
+                        <h6>You can enter multiple languages</h6>
+                        <p-chips formControlName="Languages" separator=","></p-chips>
+                        <div *ngIf="submitted && lang.Languages.errors" class="mt-1 invalid-feedback d-block">
+                            <div *ngIf="lang.Languages.errors.required">Languages required</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="mb-2 col-6">
+                        <p-dropdown appendTo="body" [options]="privacies" formControlName="Privacy"
+                            placeholder="Select Privacy" optionLabel="label" optionValue="value"></p-dropdown>
+                    </div>
+                    <div class="mb-2 col-6">
+                        <button [disabled]="isFormSubmitted" class="btn btn-success p-3 w-100" type="submit">
+                            {{ lawyerProfileSections?.Languages ? 'Update' : 'Save'}}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div *ngIf="openSection==4">
+            <form [formGroup]="socialMediaSection" autocomplete="off" (ngSubmit)="onSubmitSocialMedia()">
+                <div class="row align-items-end">
+                    <div class="mb-2 col-3">
+                        <div class="field">
+                            <label for="Type" class="block mb-2">Select Social Type</label>
+                            <div>
+                                <p-dropdown appendTo="body" [options]="socialListCopy" formControlName="Type"
+                                    placeholder="Select Address Type" optionLabel="label" optionValue="value">
+                                </p-dropdown>
+                                <div *ngIf="submitted && socialControls.Type.errors" class="invalid-feedback d-block">
+                                    <div *ngIf="socialControls.Type.errors.required">Select type required</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-2 col-3">
+                        <div class="field">
+                            <label class="block mb-2">Url</label>
+                            <div>
+                                <input type="text" formControlName="Url" pInputText class="w-100" />
+                            </div>
+                            <small *ngIf="submitted && socialControls.Url.errors" class="p-error block">
+                                Type required
+                            </small>
+                        </div>
+                    </div>
+                    <div class="mb-2 col-3">
+                        <label for="Streetv" class="form-label">Privacy</label>
+                        <div>
+                            <p-dropdown appendTo="body" [options]="privacies" formControlName="Privacy"
+                                placeholder="Select Privacy" optionLabel="label" optionValue="value"></p-dropdown>
+                            <div *ngIf="submitted && socialControls.Privacy.errors" class="invalid-feedback d-block">
+                                <div *ngIf="socialControls.Privacy.errors.required">Privacy required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-2 col-3">
+                        <button [disabled]="isFormSubmitted" class="btn btn-success p-3 w-100" type="submit">
+                            Add
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="row" *ngIf="socials.length>0">
+                <div class="mb-2 col-13">
+                    <p-table [value]="socials" responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Type</th>
+                                <th>url</th>
+                                <th>Privacy</th>
+                                <th></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-social let-index="rowIndex">
+                            <tr>
+                                <td>{{social.Type}}</td>
+                                <td>{{social.Url}}</td>
+                                <td>{{social.Privacy}}</td>
+                                <td>
+                                    <button type="button" (click)="removeSocial(index,social.Type)" pButton pRipple
+                                        label="Delete" icon="pi pi-trash p-button-danger"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+                <div class="mb-2 col-12">
+                    <button [disabled]="isFormSubmitted" class="btn btn-success p-3 w-100" type="button"
+                        (click)="confirmSocialsAdd()">
+                        {{ lawyerProfileSections?.SocialMedia?.length > 0 ? 'Update Changes' : ' Save Changes'}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="openSection==5">
+            <form [formGroup]="serviceSection" autocomplete="off" (ngSubmit)="onSubmitServices()">
+                <div class="row">
+                    <div class="mb-2 col-3">
+                        <div class="field">
+                            <label for="Type" class="block mb-2">Type</label>
+                            <div>
+                                <p-dropdown appendTo="body" [options]="areaOfLawlListCopy" formControlName="AreaOfLaw"
+                                    placeholder="Select Address Type" optionLabel="label" optionValue="value">
+                                </p-dropdown>
+                                <div *ngIf="submitted && serviceControls.AreaOfLaw.errors"
+                                    class="invalid-feedback d-block">
+                                    <div *ngIf="serviceControls.AreaOfLaw.errors.required">Select area of law</div>
+                                </div>
+                                <!-- <div *ngIf="alreadyEnteredType" class="invalid-feedback d-block">
+                                    This Address type is already entered
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-2 col-3">
+                        Service:
+                        <p-chips formControlName="Service" separator=","></p-chips>
+                        <div *ngIf="submitted && serviceControls.Service.errors" class="invalid-feedback d-block">
+                            <div *ngIf="serviceControls.Service.errors.required">Enter services</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-2 col-3">
+                        <label for="Streetv" class="form-label">Privacy</label>
+                        <div>
+                            <p-dropdown appendTo="body" [options]="privacies" formControlName="Privacy"
+                                placeholder="Select Privacy" optionLabel="label" optionValue="value"></p-dropdown>
+                            <div *ngIf="submitted && serviceControls.Privacy.errors" class="invalid-feedback d-block">
+                                <div *ngIf="serviceControls.Privacy.errors.required">Privacy required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-2 col-3">
+                        <button [disabled]="isFormSubmitted" class="btn btn-success p-3 w-100 mt-4" type="submit">
+                            Add
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+
+            <div class="row" *ngIf="services.length>0">
+                <div class="mb-2 col-13">
+                    <p-table [value]="services" responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Area of Law</th>
+                                <th>Services</th>
+                                <th>Privacy</th>
+                                <th></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-service let-index="rowIndex">
+                            <tr>
+                                <td>{{showAreaOfLaw(service.AreaOfLaw)}}</td>
+                                <td>{{service.Service}}</td>
+                                <td>{{service.Privacy}}</td>
+                                <td>
+                                    <button type="button" (click)="removeService(index,service.AreaOfLaw)" pButton
+                                        pRipple label="Delete" icon="pi pi-trash p-button-danger"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+                <div class="mb-2 col-12">
+                    <button [disabled]="isFormSubmitted" class="btn btn-success p-3 w-100" type="button"
+                        (click)="confirmServiceAdd()">
+                        {{ lawyerProfileSections?.Services?.length > 0 ? 'Update Changes' : ' Save Changes'}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="openSection==6">
+            <form [formGroup]="consultationModeSection" autocomplete="off" (ngSubmit)="onSubmitConsultationMode()">
+                <div class="row">
+
+                    <div class="mb-2 col-12">
+                        <h6>You can enter multiple mode</h6>
+                        <p-chips formControlName="Mode" separator=","></p-chips>
+                        <div *ngIf="submitted && conMode.Mode.errors" class="mt-1 invalid-feedback d-block">
+                            <div *ngIf="conMode.Mode.errors.required">Mode required</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="mb-2 col-6">
+                        <p-dropdown appendTo="body" [options]="privacies" formControlName="Privacy"
+                            placeholder="Select Privacy" optionLabel="label" optionValue="value"></p-dropdown>
+                    </div>
+                    <div class="mb-2 col-6">
+                        <button [disabled]="isFormSubmitted" class="btn btn-success p-3 w-100" type="submit">
+                            {{ lawyerProfileSections?.ConsultationMode ? 'Update' : 'Save'}}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div *ngIf="openSection==7">
+            <form [formGroup]="addressSection" autocomplete="off" (ngSubmit)="onSubmitAddress()">
+                <div class="row">
+                    <div class="mb-2 col-3">
+                        <div class="field">
+                            <label for="Type" class="block mb-2">Type</label>
+                            <div>
+                                <p-dropdown appendTo="body" [options]="addressTypeCopy" formControlName="Type"
+                                    placeholder="Select Address Type" optionLabel="label" optionValue="value">
+                                </p-dropdown>
+                                <div *ngIf="submitted && addr.Type.errors" class="invalid-feedback d-block">
+                                    <div *ngIf="addr.Type.errors.required">Type required</div>
+                                </div>
+                                <div *ngIf="alreadyEnteredType" class="invalid-feedback d-block">
+                                    This Address type is already entered
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-2 col-3">
+                        <div class="field">
+                            <label for="Streetv" class="block mb-2">Street</label>
+                            <div>
+                                <input id="url" type="text" formControlName="Street" pInputText class="w-100" />
+                            </div>
+                            <small *ngIf="submitted && addr.Street.errors" class="p-error block">
+                                Type required
+                            </small>
+                        </div>
+                    </div>
+                    <div class="mb-2 col-3">
+                        <div class="field">
+                            <label for="City" class="block mb-2">City</label>
+                            <div>
+                                <input id="City" type="text" formControlName="City" pInputText class="w-100" />
+                            </div>
+                            <small *ngIf="submitted && addr.City.errors" class="p-error block">
+                                Type required
+                            </small>
+                        </div>
+                    </div>
+                    <div class="mb-2 col-3">
+                        <div class="field">
+                            <label for="State" class="block mb-2">State</label>
+                            <div>
+                                <input id="State" type="text" formControlName="State" pInputText class="w-100" />
+                            </div>
+                            <small *ngIf="submitted && addr.State.errors" class="p-error block">
+                                Type required
+                            </small>
+                        </div>
+                    </div>
+                    <div class="mb-2 col-3">
+                        <div class="field">
+                            <label for="Country" class="block mb-2">Country</label>
+                            <div>
+                                <input id="Country" type="text" formControlName="Country" pInputText class="w-100" />
+                            </div>
+                            <small *ngIf="submitted && addr.Country.errors" class="p-error block">
+                                Type required
+                            </small>
+                        </div>
+                    </div>
+                    <div class="mb-2 col-3">
+                        <div class="field">
+                            <label for="PostalCode" class="block mb-2">Postal Code</label>
+                            <div>
+                                <input id="PostalCode" type="text" formControlName="PostalCode" pInputText
+                                    class="w-100" />
+                            </div>
+                            <small *ngIf="submitted && addr.PostalCode.errors" class="p-error block">
+                                Type required
+                            </small>
+                        </div>
+                    </div>
+                    <div class="mb-2 col-3">
+                        <label for="Streetv" class="form-label">Privacy</label>
+                        <div>
+                            <p-dropdown appendTo="body" [options]="privacies" formControlName="Privacy"
+                                placeholder="Select Privacy" optionLabel="label" optionValue="value"></p-dropdown>
+                            <div *ngIf="submitted && addr.Privacy.errors" class="invalid-feedback d-block">
+                                <div *ngIf="addr.Privacy.errors.required">Privacy required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-2 col-3">
+                        <button [disabled]="isFormSubmitted" class="btn btn-success p-3 w-100 mt-4" type="submit">
+                            Add
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+
+            <div class="row" *ngIf="addresses.length>0">
+                <div class="mb-2 col-13">
+                    <p-table [value]="addresses" responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Type</th>
+                                <th>Street</th>
+                                <th>City</th>
+                                <th>State</th>
+                                <th>Country</th>
+                                <th>PostalCode</th>
+                                <th>Privacy</th>
+                                <th></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-address let-index="rowIndex">
+                            <tr>
+                                <td>{{showAddressType(address.Type)}}</td>
+                                <td>{{address.Street}}</td>
+                                <td>{{address.City}}</td>
+                                <td>{{address.State}}</td>
+                                <td>{{address.Country}}</td>
+                                <td>{{address.PostalCode}}</td>
+                                <td>{{address.Privacy}}</td>
+                                <td>
+                                    <button type="button" (click)="removeAddress(index,address.Type)" pButton pRipple
+                                        label="Delete" icon="pi pi-trash p-button-danger"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+                <div class="mb-2 col-12">
+                    <button [disabled]="isFormSubmitted" class="btn btn-success p-3 w-100" type="button"
+                        (click)="confirmAddressAdd()">
+                        {{ lawyerProfileSections?.Addresses?.length > 0 ? 'Update Changes' : ' Save Changes'}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="openSection==8">
+            <form [formGroup]="titleSection" autocomplete="off" (ngSubmit)="onSubmitTitle()">
+                <div class="row">
+
+                    <div class="col-12">
+                        <textarea class="w-100" placeholder="Enter job title" formControlName="Title" rows="5" cols="30"
+                            pInputTextarea autoResize="autoResize"></textarea>
+                        <div *ngIf="submitted && titleControls.Title.errors" class="mt-1 invalid-feedback d-block">
+                            <div *ngIf="titleControls.Title.errors.required">Title required</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="mb-2 col-6">
+                        <p-dropdown appendTo="body" [options]="privacies" formControlName="Privacy"
+                            placeholder="Select Privacy" optionLabel="label" optionValue="value"></p-dropdown>
+                    </div>
+                    <div class="mb-2 col-6">
+                        <button [disabled]="isFormSubmitted" class="btn btn-success p-3 w-100" type="submit">
+                            {{ lawyerProfileSections?.JobTitle ? 'Update' : 'Save'}}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div *ngIf="openSection==9">
+            <form [formGroup]="videoIntroSection" autocomplete="off" (ngSubmit)="onSubmitVideoIntro()">
+                <div class="row">
+
+                    <div class="col-12">
+                        <textarea class="w-100" placeholder="Enter video source" formControlName="Source" rows="5"
+                            cols="30" pInputTextarea autoResize="autoResize"></textarea>
+                        <div *ngIf="submitted && videoControls.Source.errors" class="mt-1 invalid-feedback d-block">
+                            <div *ngIf="videoControls.Source.errors.required">Source required</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="mb-2 col-6">
+                        <p-dropdown appendTo="body" [options]="privacies" formControlName="Privacy"
+                            placeholder="Select Privacy" optionLabel="label" optionValue="value"></p-dropdown>
+                    </div>
+                    <div class="mb-2 col-6">
+                        <button [disabled]="isFormSubmitted" class="btn btn-success p-3 w-100" type="submit">
+                            {{ lawyerProfileSections?.VideoIntro ? 'Update' : 'Save'}}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div *ngIf="openSection==10">
+            <form [formGroup]="qualificationSection" autocomplete="off" (ngSubmit)="onSubmitQualification()">
+                <div class="row">
+
+                    <div class="col-12">
+                        <textarea class="w-100" placeholder="Enter Qualification" formControlName="Data" rows="5"
+                            cols="30" pInputTextarea autoResize="autoResize"></textarea>
+                        <div *ngIf="submitted && qualificationControls.Data.errors"
+                            class="mt-1 invalid-feedback d-block">
+                            <div *ngIf="qualificationControls.Data.errors.required">Qualification required</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="mb-2 col-6">
+                        <p-dropdown appendTo="body" [options]="privacies" formControlName="Privacy"
+                            placeholder="Select Privacy" optionLabel="label" optionValue="value"></p-dropdown>
+                    </div>
+                    <div class="mb-2 col-6">
+                        <button [disabled]="isFormSubmitted" class="btn btn-success p-3 w-100" type="submit">
+                            {{ lawyerProfileSections?.Qualification ? 'Update' : 'Save'}}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div *ngIf="openSection==11">
+            <form [formGroup]="feeSection" autocomplete="off" (ngSubmit)="onSubmitFee()">
+                <!-- <div class="row">
+areaOfLawlSelectedServicesFee.length>0
+                </div> -->
+                <div class="row align-items-center" *ngIf="true">
+                    <div class="col-2">
+                        <div class="field">
+                            <!-- <label for="Type" class="block mb-2">Type</label> -->
+                            <div>
+                                <p-dropdown formControlName="AreaOfLaw" appendTo="body"
+                                    [options]="areaOfLawlSelectedListCopy" placeholder="Select Area of Law"
+                                    optionLabel="label" optionValue="value" (onChange)="feeAreaOfLawChange($event)">
+                                </p-dropdown>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <!-- Service -->
+                        <div>
+                            <p-dropdown appendTo="body" [options]="areaOfLawlSelectedServicesFee"
+                                formControlName="Service" placeholder="Select service">
+                            </p-dropdown>
+                        </div>
+                        <div *ngIf="submitted && feeControls.Service.errors" class="invalid-feedback d-block">
+                            <div *ngIf="feeControls.Service.errors.required">Select service
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2 pe-0">
+                        <!-- Fee Type -->
+                        <div class="field-radiobutton">
+                            <p-radioButton name="Type" value="fixed" formControlName="Type" inputId="type1">
+                            </p-radioButton>
+                            <label class="ms-1" for="type1">Fixed</label>
+                            <p-radioButton class="ms-2" name="Type" value="perHour" formControlName="Type"
+                                inputId="type2">
+                            </p-radioButton>
+                            <label class="ms-1" for="type2">Per Hour</label>
+                        </div>
+                        <div *ngIf="submitted && feeControls.Type.errors" class="invalid-feedback d-block">
+                            <div *ngIf="feeControls.Type.errors.required">Type required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <!-- Charges -->
+                        <div>
+                            <input id="url" type="text" formControlName="Charges" placeholder="Charges" pInputText
+                                class="w-100" />
+                        </div>
+                        <div *ngIf="submitted && feeControls.Charges.errors" class="invalid-feedback d-block">
+                            <div *ngIf="feeControls.Charges.errors.required">Charges required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <!-- Privacy -->
+                        <div>
+                            <p-dropdown appendTo="body" [options]="privacies" formControlName="Privacy"
+                                placeholder="Select Privacy" optionLabel="label" optionValue="value">
+                            </p-dropdown>
+                            <div *ngIf="submitted && feeControls.Privacy.errors" class="invalid-feedback d-block">
+                                <div *ngIf="feeControls.Privacy.errors.required">Privacy required
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <button type="submit" pButton pRipple label="Add" icon="pi pi-plus p-button-success"></button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="row mt-4" *ngIf="servicesFees.length>0">
+                <div class="mb-2 col-12">
+                    <p-table [value]="servicesFees" responsiveLayout="scroll">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Area Of Law</th>
+                                <th>Service</th>
+                                <th>Charges</th>
+                                <th>Type</th>
+                                <th>Privacy</th>
+                                <th></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-fee let-index="rowIndex">
+                            <tr>
+                                <td>{{showAreaOfLaw(fee.AreaOfLaw)}}</td>
+                                <td>{{fee.Service}}</td>
+                                <td>{{fee.Charges}}</td>
+                                <td>{{fee.Tpe}}</td>
+                                <td>{{fee.Privacy}}</td>
+                                <td>
+                                    <button type="button" (click)="removeService(index,fee.AreaOfLaw)" pButton pRipple
+                                        label="Delete" icon="pi pi-trash p-button-danger"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+                <div class="mb-2 col-12">
+                    <button [disabled]="isFormSubmitted" class="btn btn-success p-3 w-100" type="button"
+                        (click)="confirmServicesFeeAdd()">
+                        Save Changes
+                    </button>
+                </div>
+            </div>
+        </div>
+        <ng-template pTemplate="footer">
+            <p-button (click)="displayBasic=false" label="Close" styleClass="p-button-text"></p-button>
+        </ng-template>
+    </p-dialog>
+</div>
